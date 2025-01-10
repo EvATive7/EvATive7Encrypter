@@ -17,7 +17,7 @@ def get_chinese_characters_with_pinyin_qi():
 
 
 class EvATive7ENCv1:
-    NAME = __name__
+    NAME = 'EvATive7ENCv1'
     IDENTIFIER = "="
     VERHASH_IDENTIFIER_LENGTH = 0
     CHARSET = "邶柒七0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -28,9 +28,9 @@ class EvATive7ENCv1:
     BASE = len(CHARSET)
 
     SALT_LENGTH = 7
-    HASH_LENGTH = 77
+    HASH_LENGTH = 64
     CHAR_OFFSET = 7
-    KEY_LENGTH = 77
+    KEY_LENGTH = 64
 
     @classmethod
     def key(cls, length: int = None) -> str:
