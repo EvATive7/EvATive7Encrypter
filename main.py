@@ -3,10 +3,10 @@ import time
 
 if __name__ == "__main__":
     model = EvATive7ENCv1
-    #model = EvATive7ENCv1Short
+    origin = open("txt/text.txt", "r", encoding="utf-8").read()
+    # model = EvATive7ENCv1Short
+    # origin = "你好，我是邶柒EvATive7。"
     for i in range(1):
-        origin = open("text.txt", "r", encoding="utf-8").read()
-        #origin = "你好，我是邶柒EvATive7。"
         key = model.key()
 
         begin = time.time()
@@ -17,7 +17,7 @@ if __name__ == "__main__":
         print(
             f"Cost {cost}, Encoded,\nOrigin length: {len(origin)}, encoded length: {len(encoded)}, Efficiency: {len(origin)/len(encoded)}",
         )
-        open("encoded.txt", "w", encoding="utf-8").write(
+        open("txt/encoded.txt", "w", encoding="utf-8").write(
             f"""EvATive7ENCv1
 
 === KEY BEGIN ===
@@ -37,6 +37,6 @@ if __name__ == "__main__":
         cost = end - begin
 
         print(f"Cost {cost}, Decoded")
-        open("decoded.txt", "w", encoding="utf-8").write(decoded)
+        open("txt/decoded.txt", "w", encoding="utf-8").write(decoded)
 
         assert origin == decoded
