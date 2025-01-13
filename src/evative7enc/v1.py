@@ -1,6 +1,9 @@
-import secrets
 import hashlib
-from pypinyin import pinyin, Style
+import logging
+import secrets
+import time
+
+from pypinyin import Style, pinyin
 
 
 def get_chinese_characters_with_pinyin_qi():
@@ -17,7 +20,7 @@ def get_chinese_characters_with_pinyin_qi():
 
 
 class EvATive7ENCv1:
-    NAME = 'EvATive7ENCv1'
+    NAME = "EvATive7ENCv1"
     IDENTIFIER = "="
     VERHASH_IDENTIFIER_LENGTH = 0
     CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz邶柒七"
@@ -32,11 +35,12 @@ class EvATive7ENCv1:
     CHAR_OFFSET = 7
     KEY_LENGTH = 64
 
-    @classmethod
-    def key(cls, length: int = None) -> str:
-        if not length:
-            length = cls.KEY_LENGTH
-        return "".join(secrets.choice(cls.CHARSET) for _ in range(length))
+    KEY_BEGIN_MARKER = "=== KEY BEGIN ==="
+    KEY_END_MARKER = "=== KEY END ==="
+    ENCODED_BEGIN_MARKER = "=== ENCODED BEGIN ==="
+    ENCODED_END_MARKER = "=== ENCODED END ==="
+
+    logger = logging.getLogger(NAME)
 
     @classmethod
     def _compute_hash(cls, data: str) -> str:
@@ -88,9 +92,50 @@ class EvATive7ENCv1:
         return segments, i
 
     @classmethod
-    def encode(cls, key: str, text: str) -> str:
-        salt = "".join(secrets.choice(cls.CHARSET) for _ in range(cls.SALT_LENGTH))
+    def _extract(cls, text, start_marker, end_marker) -> str | None:
+        start_index = text.find(start_marker) + len(start_marker)
+        end_index = text.find(end_marker)
+        if start_index != -1 and end_index != -1:
+            return text[start_index:end_index].strip()
+        else:
+            return None
 
+    @classmethod
+    def key(cls, length: int = None) -> str:
+        if not length:
+            length = cls.KEY_LENGTH
+        return "".join(secrets.choice(cls.CHARSET) for _ in range(length))
+
+    @classmethod
+    def encode_to_evative7encformatv1(cls, key: str, text: str) -> str:
+        encoded = cls.encode(key, text)
+        result = f"""EvATive7ENCv1
+
+{cls.KEY_BEGIN_MARKER}
+{key}
+{cls.KEY_END_MARKER}
+
+
+{cls.ENCODED_BEGIN_MARKER}
+{encoded}
+{cls.ENCODED_END_MARKER}
+"""
+        return result
+
+    @classmethod
+    def decode_from_evative7encformatv1(cls, text: str) -> str:
+        if not text.startswith("EvATive7ENCv1"):
+            raise Exception("Invalid EvATive7ENCFormatv1")
+        key = cls._extract(text, cls.KEY_BEGIN_MARKER, cls.KEY_END_MARKER)
+        encoded = cls._extract(text, cls.ENCODED_BEGIN_MARKER, cls.ENCODED_END_MARKER)
+
+        return cls.decode(key, encoded)
+
+    @classmethod
+    def encode(cls, key: str, text: str) -> str:
+        begin = time.time()
+
+        salt = "".join(secrets.choice(cls.CHARSET) for _ in range(cls.SALT_LENGTH))
         integrity_hash = cls._compute_hash(salt + text + key)
 
         encoded = []
@@ -112,10 +157,17 @@ class EvATive7ENCv1:
             + cls._paragraph_combination(encoded)
         )
 
+        end = time.time()
+        cls.logger.debug(
+            f"Encoded after {end-begin}s. Origin length: {len(text)}, encoded length: {len(encoded)}, efficiency: {len(text)/len(encoded)}"
+        )
+
         return result
 
     @classmethod
     def decode(cls, key: str, text: str) -> str:
+        begin = time.time()
+
         if not text.startswith(cls.NAME):
             raise Exception("Invalid encoded text format")
 
@@ -151,11 +203,14 @@ class EvATive7ENCv1:
                 "Integrity check failed. The encoded text may have been tampered with."
             )
 
+        end = time.time()
+        cls.logger.debug(f"Decoded after {end-begin}s")
+
         return result
 
 
 class EvATive7ENCv1Short(EvATive7ENCv1):
-    NAME = '7E1S'
+    NAME = "7E1S"
 
     SALT_LENGTH = 1
     HASH_LENGTH = 1
