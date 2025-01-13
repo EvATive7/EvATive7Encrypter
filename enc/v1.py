@@ -20,7 +20,7 @@ class EvATive7ENCv1:
     NAME = 'EvATive7ENCv1'
     IDENTIFIER = "="
     VERHASH_IDENTIFIER_LENGTH = 0
-    CHARSET = "邶柒七0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz邶柒七"
     # CHARSET = get_chinese_characters_with_pinyin_qi()
     # CHARSET = "!@#$%^&*()_-+/\\邶柒七0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     # CHARSET = "7EATIVeativ邶柒七"
