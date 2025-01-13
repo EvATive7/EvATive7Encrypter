@@ -211,8 +211,8 @@ class EvATive7ENCv1:
 
 
 class EvATive7ENCv1Short(EvATive7ENCv1):
-    NAME = "7E1S"
+    _NAME = "7E1S"
 
-    SALT_LENGTH = 1
-    HASH_LENGTH = 1
-    KEY_LENGTH = 1
+    _SALT_LENGTH = 1
+    _HASH_LENGTH = 1
+    _KEY_LENGTH = 1
