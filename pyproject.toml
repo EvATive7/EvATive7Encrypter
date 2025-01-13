@@ -33,8 +33,5 @@ testpaths = ["test"]
 [tool.isort]
 profile = "black"
 
-[tool.setuptools]
-packages = ["evative7enc"]
-
 [tool.setuptools.package-dir]
 "" = "src"

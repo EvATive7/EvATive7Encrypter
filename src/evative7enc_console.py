@@ -34,7 +34,7 @@ def _mainv1(model: EvATive7ENCv1 | EvATive7ENCv1Short, input_, mode, key=None):
             key = model.key()
         result = model.encode_to_evative7encformatv1(key, input_)
     elif mode == "dec":
-        if key:
+        if not key:
             result = model.decode_from_evative7encformatv1(input_)
         else:
             result = model.decode(key, input_)
@@ -48,13 +48,11 @@ def main():
     global input_file, output_file
     parser = argparse.ArgumentParser(description="Encrypter/Decrypter via EvATive7ENC")
     parser.add_argument(
-        "input_file",
-        nargs="?",
+        "--input-file",
         help="Input file to be processed. If not specified, read from standard input.",
     )
     parser.add_argument(
-        "output_file",
-        nargs="?",
+        "--output-file",
         help="Output file for the processed content. If not specified, write to standard output.",
     )
 
