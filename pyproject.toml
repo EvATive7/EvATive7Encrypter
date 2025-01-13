@@ -13,6 +13,7 @@ dependencies = [
   "pytest",
   "black",
   "isort",
+  "build"
 ]
 description = "Definition, specification, implementation and toolkit of EvATive7ENC"
 name = "EvATive7Encrypter"
