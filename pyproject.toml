@@ -8,18 +8,19 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Operating System :: OS Independent",
 ]
-dependencies = ["pypinyin>=0.50.0,<1.0.0", "build"]
+dependencies = []
 description = "Definition, specification, implementation and toolkit of EvATive7ENC"
 name = "EvATive7Encrypter"
 readme = "README.md"
 requires-python = ">=3.6"
-version = "0.1.1"
+version = "0.1.2"
 
 [project.urls]
 "Homepage" = "https://github.com/EvATive7/EvATive7Encrypter"
 
 [project.optional-dependencies]
 dev = ["black", "isort", "flake8", "pytest", "pre-commit"]
+build = ["build"]
 
 [project.scripts]
 evative7enc = "evative7enc_console:main"

@@ -3,21 +3,6 @@ import logging
 import secrets
 import time
 
-from pypinyin import Style, pinyin
-
-
-def _get_chinese_characters_with_pinyin_qi():
-    start, end = 0x4E00, 0x9FFF
-    result = []
-
-    for char_code in range(start, end + 1):
-        char = chr(char_code)
-        py = pinyin(char, style=Style.NORMAL, heteronym=False)
-        if py and py[0][0] == "qi":
-            result.append(char)
-
-    return "".join(result)
-
 
 class EvATive7ENCv1:
     _NAME = "EvATive7ENCv1"
