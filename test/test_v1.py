@@ -8,7 +8,7 @@ You are right, but there are only two possibilities for a person who does not li
 """
 
 
-def _testv1(model: EvATive7ENCv1 | EvATive7ENCv1Short):
+def _testv1(model: type[EvATive7ENCv1 | EvATive7ENCv1Short]):
     key = model.key()
     origin = long_text
 

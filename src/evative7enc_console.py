@@ -28,7 +28,7 @@ def _output(content):
         print(content)
 
 
-def _mainv1(model: EvATive7ENCv1 | EvATive7ENCv1Short, input_, mode, key=None):
+def _mainv1(model: type[EvATive7ENCv1 | EvATive7ENCv1Short], input_, mode, key=None):
     if mode == "enc":
         if not key:
             key = model.key()
