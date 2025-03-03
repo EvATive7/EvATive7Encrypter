@@ -144,7 +144,10 @@ class EvATive7ENCv1:
 
         end = time.time()
         cls._logger.debug(
-            f"Encoded after {end-begin}s. Origin length: {len(text)}, encoded length: {len(encoded)}, efficiency: {len(text)/len(encoded)}"
+            f"Encoded after {(end-begin)*1000}ms. "
+            + f"Origin length: {len(text)}, "
+            + f"encoded length: {len(result)}, "
+            + f"efficiency: {len(text)/len(result)}"
         )
 
         return result
@@ -190,7 +193,7 @@ class EvATive7ENCv1:
             )
 
         end = time.time()
-        cls._logger.debug(f"Decoded after {end-begin}s")
+        cls._logger.debug(f"Decoded after {(end-begin)*1000}ms")
 
         return result
 
