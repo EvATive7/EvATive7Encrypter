@@ -36,10 +36,10 @@ alg = EvATive7ENCv1
 
 input_text = Path(".cache/txt/text.txt").read_text("utf-8")
 key = alg.key()
-encoded = alg.encode_to_evative7encformatv1(key, input_text)
-decoded = alg.decode_from_evative7encformatv1(encoded)
+encrypted = alg.encrypt_to_evative7encformatv1(key, input_text)
+decrypted = alg.decrypt_from_evative7encformatv1(encrypted)
 
-Path(".cache/txt/encoded.txt").write_text(encoded, "utf-8")
-Path(".cache/txt/decoded.txt").write_text(decoded, "utf-8")
+Path(".cache/txt/encrypted.txt").write_text(encrypted, "utf-8")
+Path(".cache/txt/decrypted.txt").write_text(decrypted, "utf-8")
 
 ```

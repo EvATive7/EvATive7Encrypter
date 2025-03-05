@@ -13,8 +13,8 @@ def _testv1(
     script_runner: ScriptRunner,
     algname,
     origin_file: Optional[Path],
-    encoded_file: Optional[Path],
-    decoded_file: Optional[Path],
+    encrypted_file: Optional[Path],
+    decrypted_file: Optional[Path],
     custom_key: bool,
 ):
     origin = const.LONG_TEXT
@@ -24,13 +24,13 @@ def _testv1(
         origin_file.touch(exist_ok=True)
         origin_file.write_text(origin, "utf-8")
 
-    if encoded_file:
-        encoded_file.parent.mkdir(parents=True, exist_ok=True)
-        encoded_file.touch(exist_ok=True)
+    if encrypted_file:
+        encrypted_file.parent.mkdir(parents=True, exist_ok=True)
+        encrypted_file.touch(exist_ok=True)
 
-    if decoded_file:
-        decoded_file.parent.mkdir(parents=True, exist_ok=True)
-        decoded_file.touch(exist_ok=True)
+    if decrypted_file:
+        decrypted_file.parent.mkdir(parents=True, exist_ok=True)
+        decrypted_file.touch(exist_ok=True)
 
     alg: type[EvATive7ENCv1] = algs[algname]
 
@@ -41,9 +41,9 @@ def _testv1(
     if origin_file:
         enc_cmd.append("--input-file")
         enc_cmd.append(str(origin_file.absolute()))
-    if encoded_file:
+    if encrypted_file:
         enc_cmd.append("--output-file")
-        enc_cmd.append(str(encoded_file.absolute()))
+        enc_cmd.append(str(encrypted_file.absolute()))
     enc_cmd.append(algname)
     enc_cmd.append("--mode")
     enc_cmd.append("enc")
@@ -58,40 +58,40 @@ def _testv1(
 
     assert enc_result.success
 
-    if not encoded_file:
-        encoded = enc_result.stdout
+    if not encrypted_file:
+        encrypted = enc_result.stdout
 
     dec_cmd = ["evative7enc"]
-    if encoded_file:
+    if encrypted_file:
         dec_cmd.append("--input-file")
-        dec_cmd.append(str(encoded_file.absolute()))
-    if decoded_file:
+        dec_cmd.append(str(encrypted_file.absolute()))
+    if decrypted_file:
         dec_cmd.append("--output-file")
-        dec_cmd.append(str(decoded_file.absolute()))
+        dec_cmd.append(str(decrypted_file.absolute()))
     dec_cmd.append(algname)
     dec_cmd.append("--mode")
     dec_cmd.append("dec")
 
-    if encoded_file:
+    if encrypted_file:
         dec_result = script_runner.run(dec_cmd)
     else:
-        dec_result = script_runner.run(dec_cmd, stdin=io.StringIO(encoded))
+        dec_result = script_runner.run(dec_cmd, stdin=io.StringIO(encrypted))
 
     assert dec_result.success
 
-    if decoded_file:
-        decoded = decoded_file.read_text("utf-8")
+    if decrypted_file:
+        decrypted = decrypted_file.read_text("utf-8")
     else:
-        decoded = dec_result.stdout
+        decrypted = dec_result.stdout
 
-    assert origin.strip() == decoded.strip()
+    assert origin.strip() == decrypted.strip()
 
     if origin_file:
         origin_file.unlink(missing_ok=True)
-    if encoded_file:
-        encoded_file.unlink(missing_ok=True)
-    if decoded_file:
-        decoded_file.unlink(missing_ok=True)
+    if encrypted_file:
+        encrypted_file.unlink(missing_ok=True)
+    if decrypted_file:
+        decrypted_file.unlink(missing_ok=True)
 
 
 @pytest.mark.parametrize(
@@ -103,13 +103,13 @@ def _testv1(
     ids=["Random Key", "Custom Key"],
 )
 @pytest.mark.parametrize(
-    "origin_file, encoded_file, decoded_file",
+    "origin_file, encrypted_file, decrypted_file",
     [
         (None, None, None),
         (
             Path(".cache/test_console/origin.txt"),
-            Path(".cache/test_console/encoded.txt"),
-            Path(".cache/test_console/decoded.txt"),
+            Path(".cache/test_console/encrypted.txt"),
+            Path(".cache/test_console/decrypted.txt"),
         ),
     ],
     ids=["stdio", "file"],
@@ -122,8 +122,8 @@ def test_EvATive7ENCv1(
     script_runner: ScriptRunner,
     alg: str,
     origin_file: Optional[Path],
-    encoded_file: Optional[Path],
-    decoded_file: Optional[Path],
+    encrypted_file: Optional[Path],
+    decrypted_file: Optional[Path],
     custom_key: bool,
 ):
-    _testv1(script_runner, alg, origin_file, encoded_file, decoded_file, custom_key)
+    _testv1(script_runner, alg, origin_file, encrypted_file, decrypted_file, custom_key)

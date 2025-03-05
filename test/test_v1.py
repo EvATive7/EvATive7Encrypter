@@ -8,11 +8,11 @@ def _testv1(alg: type[EvATive7ENCv1]):
     key = alg.key()
     origin = const.LONG_TEXT
 
-    encoded = alg.encode_to_evative7encformatv1(key, origin)
-    assert encoded is not None
+    encrypted = alg.encrypt_to_evative7encformatv1(key, origin)
+    assert encrypted is not None
 
-    decoded = alg.decode_from_evative7encformatv1(encoded)
-    assert decoded == origin
+    decrypted = alg.decrypt_from_evative7encformatv1(encrypted)
+    assert decrypted == origin
 
 
 @pytest.mark.parametrize(

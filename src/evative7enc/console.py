@@ -32,9 +32,9 @@ def _mainv1(alg: type[EvATive7ENCv1], input_, mode, key=None):
     if mode == "enc":
         if not key:
             key = alg.key()
-        result = alg.encode_to_evative7encformatv1(key, input_)
+        result = alg.encrypt_to_evative7encformatv1(key, input_)
     elif mode == "dec":
-        result = alg.decode_from_evative7encformatv1(input_)
+        result = alg.decrypt_from_evative7encformatv1(input_)
     else:
         raise Exception("Invalid mode. Use 'enc' or 'dec'")
 
