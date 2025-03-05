@@ -8,12 +8,7 @@ class EvATive7ENCv1:
     _NAME = "EvATive7ENCv1"
     _IDENTIFIER = "="
     _VERHASH_IDENTIFIER_LENGTH = 0
-    _CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz邶柒七"
-    # _CHARSET = _get_chinese_characters_with_pinyin_qi()
-    # _CHARSET = "!@#$%^&*()_-+/\\邶柒七0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-    # _CHARSET = "7EATIVeativ邶柒七"
-
-    _BASE = len(_CHARSET)
+    _CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
     _SALT_LENGTH = 7
     _HASH_LENGTH = 64
@@ -28,6 +23,10 @@ class EvATive7ENCv1:
     _logger = logging.getLogger(_NAME)
 
     @classmethod
+    def _base(cls):
+        return len(cls._CHARSET)
+
+    @classmethod
     def _compute_hash(cls, data: str) -> str:
         return hashlib.sha256(data.encode()).hexdigest()[: cls._HASH_LENGTH]
 
@@ -35,16 +34,16 @@ class EvATive7ENCv1:
     def _base_encode(cls, char_code: int) -> str:
         base_repr = ""
         while char_code > 0:
-            remainder = char_code % cls._BASE
+            remainder = char_code % cls._base()
             base_repr = cls._CHARSET[remainder] + base_repr
-            char_code //= cls._BASE
+            char_code //= cls._base()
         return base_repr
 
     @classmethod
     def _base_decode(cls, chars: str) -> int:
         char_code = 0
         for char in chars:
-            char_code = char_code * cls._BASE + cls._CHARSET.index(char)
+            char_code = char_code * cls._base() + cls._CHARSET.index(char)
         return char_code
 
     @classmethod
@@ -204,3 +203,13 @@ class EvATive7ENCv1Short(EvATive7ENCv1):
     _SALT_LENGTH = 1
     _HASH_LENGTH = 1
     _KEY_LENGTH = 1
+
+
+class EvATive7ENCv1Chinese(EvATive7ENCv1):
+    _NAME = "柒密一"
+    _KEY_BEGIN_MARKER = "密钥始"
+    _KEY_END_MARKER = "密钥末"
+    _ENCODED_BEGIN_MARKER = "密文始"
+    _ENCODED_END_MARKER = "密文末"
+    _IDENTIFIER = "邶"
+    _CHARSET = "七柒丌乞亓亝亟企伎俟倛偈傶僛其凄切刺剘勤吃启吱呇呮咠唘唭啓啔啟喰嘁噐器圻埼夡奇契妻娸婍宿屺岂岐岓崎嵜己帺幾弃忔忮忯忾恓恝悽愒愭愾慼慽憇憩懠戚扢扱扺技抵挈捿掑揭摖支攲敧斉斊旂旗晵暣朞期杞枝栔栖桤桼梩棄棊棋棨棲榿槭檱櫀欫欹欺歧气気氣汔汽沏泣洓淇淒湆湇溪滊漆漬濝濟炁焏猉玂玘琦琪璂甈甭畦畸疧盀盵矵砌碁碕碛碶磎磜磧磩礘示祁祇祈祺禥禨稘稽竒簯簱籏粸紪絜綥綦綨綮綺緀緕緝纃绮缉缼罊耆肐肵脐臍舙艩芑芞芪荠萁萋萕葺蕲薺藄蘄蚑蚔蚚蛣蛴蜝蜞螇螧蟣蟿蠐衹袳裿褀褄觭訖諆諬諿讫豈起趞趿跂踑踖踦蹊躩軙軝迄迉逗邔郪鄿釮錡鏚鐖锜闙隑霋頎颀饑騎騏騹骐骑鬐鬾鬿魌鮨鯕鰭鲯鳍鵸鶀鶈鸂麒麡鼜齊齐齮"

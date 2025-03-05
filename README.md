@@ -10,7 +10,36 @@ Definition, specification, implementation and toolkit of EvATive7ENC
 
 </div>
 
-## Usage
+## Install
 
 1. `pip install EvATive7Encrypter`
-1. `evative7enc`
+
+## Usage
+
+### CLI
+
+- using `evative7enc --help` to see help
+- `Write-Output "thisIsATest" | evative7enc v1` (in PowerShell), `echo thisIsATest | evative7enc v1` (in bash or cmd)
+- ...
+
+### As a library
+
+```python
+import logging
+from pathlib import Path
+
+from evative7enc import *
+
+logging.basicConfig(level=logging.DEBUG)
+
+alg = EvATive7ENCv1
+
+input_text = Path(".cache/txt/text.txt").read_text("utf-8")
+key = alg.key()
+encoded = alg.encode_to_evative7encformatv1(key, input_text)
+decoded = alg.decode_from_evative7encformatv1(encoded)
+
+Path(".cache/txt/encoded.txt").write_text(encoded, "utf-8")
+Path(".cache/txt/decoded.txt").write_text(decoded, "utf-8")
+
+```
