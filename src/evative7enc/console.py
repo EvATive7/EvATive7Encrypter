@@ -1,4 +1,5 @@
 import argparse
+import io
 import logging
 import sys
 import time
@@ -6,6 +7,7 @@ import time
 from evative7enc import *
 
 logging.basicConfig(level=logging.ERROR, format="%(levelname)s - %(message)s")
+sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding="utf-8")
 
 input_file = None
 output_file = None
