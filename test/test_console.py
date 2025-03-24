@@ -55,7 +55,7 @@ def _testv1(
     else:
         enc_result = script_runner.run(enc_cmd, stdin=io.StringIO(origin))
 
-    assert enc_result.success
+    assert enc_result.success, enc_result.stderr
 
     if not encrypted_file:
         encrypted = enc_result.stdout
@@ -75,7 +75,7 @@ def _testv1(
     else:
         dec_result = script_runner.run(dec_cmd, stdin=io.StringIO(encrypted))
 
-    assert dec_result.success
+    assert dec_result.success, dec_result.stderr
 
     if decrypted_file:
         decrypted = decrypted_file.read_text("utf-8")

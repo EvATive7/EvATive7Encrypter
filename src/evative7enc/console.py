@@ -2,32 +2,36 @@ import argparse
 import io
 import logging
 import sys
-import time
+from pathlib import Path
 
 from evative7enc import *
 
+DEFAULT_ENCODING = "utf-8"
 logging.basicConfig(level=logging.ERROR, format="%(levelname)s - %(message)s")
 
-if hasattr(sys.stdin, "buffer"):
-    sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding="utf-8")
+if sys.stdin.encoding is None and hasattr(sys.stdin, "buffer"):
+    sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding=DEFAULT_ENCODING)
+if sys.stdout.encoding is None and hasattr(sys.stdout, "buffer"):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=DEFAULT_ENCODING)
 
-input_file = None
-output_file = None
 
-
-def _input():
+def _input(input_file: str):
     if input_file:
-        with open(input_file, "r", encoding="utf-8") as f:
-            origin = f.read()
+        input_file = Path(input_file)
+        if not input_file.exists():
+            logging.error(f"Input file '{input_file}' not found.")
+            exit(1)
+        else:
+            return input_file.read_text(encoding=DEFAULT_ENCODING)
     else:
-        origin = sys.stdin.read()
-    return origin
+        return sys.stdin.read().strip()
 
 
-def _output(content):
+def _output(content, output_file: str):
     if output_file:
-        with open(output_file, "w", encoding="utf-8") as f:
-            f.write(content)
+        output_file = Path(output_file)
+        output_file.touch(exist_ok=True)
+        output_file.write_text(content, encoding=DEFAULT_ENCODING)
     else:
         print(content)
 
@@ -91,11 +95,16 @@ def main():
     parser = _get_parser()
     args = parser.parse_args()
 
-    input_file = args.input_file
-    output_file = args.output_file
+    if args.input_file:
+        input_file = Path(args.input_file)
+    if args.output_file:
+        output_file = Path(args.output_file)
 
     alg = algs[args.id]
-    _output(_mainv1(alg, _input(), args.mode, args.key))
+
+    input_ = _input(args.input_file)
+    result = _mainv1(alg, input_, args.mode, args.key)
+    _output(result, args.output_file)
 
 
 if __name__ == "__main__":
