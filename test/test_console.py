@@ -45,7 +45,6 @@ def _testv1(
         enc_cmd.append("--output-file")
         enc_cmd.append(str(encrypted_file.absolute()))
     enc_cmd.append(algname)
-    enc_cmd.append("--mode")
     enc_cmd.append("enc")
     if custom_key:
         enc_cmd.append("--key")
@@ -69,7 +68,6 @@ def _testv1(
         dec_cmd.append("--output-file")
         dec_cmd.append(str(decrypted_file.absolute()))
     dec_cmd.append(algname)
-    dec_cmd.append("--mode")
     dec_cmd.append("dec")
 
     if encrypted_file:

@@ -48,7 +48,7 @@ def _mainv1(alg: type[EvATive7ENCv1], input_, mode, key=None):
 def _add_v1_sub_parser(subparsers, name, description):
     parser = subparsers.add_parser(name, help=description)
     parser.add_argument(
-        "--mode",
+        "mode",
         choices=["enc", "dec"],
         default="enc",
         help="Mode of operation: 'enc' for encryption or 'dec' for decryption.",
