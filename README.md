@@ -19,7 +19,7 @@ Definition, specification, implementation and toolkit of EvATive7ENC
 ### CLI
 
 - using `evative7enc --help` or `7enc --help` to see help
-- `Write-Output "thisIsATest" | evative7enc v1` (in PowerShell), `echo thisIsATest | evative7enc v1` (in bash or cmd)
+- `Write-Output "This is a test" | evative7enc v1 enc` (in PowerShell), `echo This is a test | evative7enc v1 enc` (in bash or cmd)
 - ...
 
 ### As a library
